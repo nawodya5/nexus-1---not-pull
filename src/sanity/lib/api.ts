@@ -21,6 +21,7 @@ import {
     privacyPolicy,
     insights,
     Post,
+    siteSettingsQuery
 } from './queries';
 
 
@@ -58,8 +59,25 @@ import {
     LinkedinSectionData,
     photoSectionDescriptionItem,
     ServiceCardData,
+    footerData,
+    siteSettings,
 
 } from '@/sanity/types';
+
+
+
+
+
+export async function siteSettingsData(): Promise<siteSettings | null> {
+    try {
+        const data = await sanityClient.fetch(siteSettingsQuery);
+        console.log("Fetched site settings data:", data);
+        return data && data.length > 0 ? data[0] : null;
+    } catch (error) {
+        console.error("Error fetching site settings data:", error);
+        return null;
+    }
+}
 
 // The 'sanityClient' variable is imported and will now be directly used in the fetch functions below.
 
@@ -134,6 +152,10 @@ export async function getAirAndFreightServiceData(): Promise<AirAndFreightData |
     }
 }
 
+
+
+
+
 /**
  * Fetches data for the Contact Us page.
  * @returns {Promise<ContactUspageData | null>} The contact us data or null if an error occurs.
@@ -167,10 +189,10 @@ export async function getCustomsData(): Promise<CustomsData | null> {
 }
 
 /**
- * Fetches data for the Footer section.
- * @returns {Promise<any | null>} The footer data or null if an error occurs. (Assuming footer has a specific type, replace 'any')
+ * Fetches data for the Air and Freight Service page.
+ * @returns {Promise<AirAndFreightData | null>} The air and freight service data or null if an error occurs.
  */
-export async function getFooterData(): Promise<any | null> {
+export async function getFooterData(): Promise<footerData | null> {
     try {
         const data = await sanityClient.fetch(footer);
         console.log("Fetched footer data:", data);
@@ -270,7 +292,7 @@ export async function getTrackAndTraceData(): Promise<trackAndTraceData | null> 
     try {
         const data = await sanityClient.fetch(trackAndTrace);
         console.log("Fetched track and trace data:", data);
-       
+
         return data && data.length > 0 ? data[0] : null;
     } catch (error) {
         console.error("Error fetching track and trace data:", error);

@@ -1,5 +1,6 @@
 import { TypedObject } from "@portabletext/types";
 import { PortableText, PortableTextBlock } from "@portabletext/react";
+import { desc } from "framer-motion/client";
 
 
 // air and freight data interface
@@ -194,6 +195,18 @@ export interface CustomsData {
   seo?: SeoData;
 }
 
+export interface siteSettings {
+  siteName?: string;
+  logo?: {
+    url?: string;
+    alt?: string;
+  };
+  script?: string;
+  favicon?: {
+    url?: string;
+    alt?: string;
+  };
+}
 
 
 export interface HomePageData {
@@ -201,7 +214,23 @@ export interface HomePageData {
   seo?: SeoData;
 }
 
+export interface FooterLink {
+  nav_item_name: string;
+  nav_item_link: string;
+}
 
+export interface footerData {
+  footer_description?: string;
+  footer_button_text?: string;
+  footer_button_link?: string;
+  footer_logo?: string;
+  footer_logo_alt?: string;
+  footer_sub_description?: string;
+  footer_column_1_title?: string;
+  footer_links_column_1?: FooterLink[];
+  footer_column_2_title?: string;
+  footer_links_column_2?: FooterLink[];
+}
 
 export interface insightData {
   hero_section?: HeroSection;

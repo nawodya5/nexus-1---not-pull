@@ -286,7 +286,20 @@ export const customs = `
   
 `
 
-
+export const siteSettingsQuery = `
+ *[_type == "siteData"]{
+  siteName,
+  logo{
+    "url": asset->url,
+    alt: asset->originalFilename
+  },
+  script,
+  favicon{
+    "url": asset->url,
+    alt: asset->originalFilename
+  }
+}
+`;
 
 export const footer = `
   *[_type == "footer"]{
