@@ -1,55 +1,63 @@
+// src/app/insights/[id]/page.tsx
+// This is a Server Component, so no "use client"; at the top.
 
 import Image from "next/image";
-import Nav from "@/Components/Nav";
 import React from "react";
+import Nav from "@/Components/Nav";
 import LinkedinSection from "@/Components/LinkedinSection";
 import { getInsightPageData, getPostData } from "@/sanity/lib/api";
-import { useParams } from "next/navigation";
 
 import { PortableText } from '@portabletext/react';
+import { urlFor } from "../../../../client"; // Assuming urlFor is in your client.ts
+import { Metadata } from "next";
 
+// Define interfaces directly or import them from your types file
 interface RelatedPost {
     postTitle: string;
     Post_short_description: string;
-    postContent: any;
+    postContent: any; // Portable Text content
     slug: string;
     postImage: string;
 }
 
-interface HeroSection {
+interface HeroSectionType { // Renamed to avoid conflict if a HeroSection component exists
     heroTitle?: string;
     heroImage?: string;
 }
 
 interface InsightsPageData {
-    hero_section?: HeroSection;
+    hero_section?: HeroSectionType;
     Page_subtitle?: string;
 }
 
 interface PostDetails {
     postTitle: string;
     Post_short_description: string;
-    postContent: any;
+    postContent: any; // Portable Text content
     slug: string;
     postImage: string;
     related_posts?: RelatedPost[];
 }
 
-const InsightInner = async() => {
-    const params = useParams();
-    const slug = Array.isArray(params.id) ? params.id[0] : params.id;
+// This is the main page component for the dynamic route
+// It receives 'params' directly from Next.js
+const InsightInnerPage = async ({ params }: { params: { id: string } }) => {
+    // Await the params object before accessing its properties
+    const resolvedParams = await params;
+    const slug = resolvedParams.id; // Extract 'id' and use it as 'slug'
 
-    
+    // Directly await data fetching in the Server Component
     const postData: PostDetails | null = await getPostData(slug);
     const insightsPageData: InsightsPageData | null = await getInsightPageData();
 
     if (!postData) {
         return (
             <div className="min-h-screen flex items-center justify-center">
-                No content available for this post.
+                <div className="text-lg">No content available for this post.</div>
             </div>
         );
     }
+
     return (
         <div className="min-h-screen bg-[#F6F6F6] poppins">
             <div className="relative mx-auto block">
@@ -76,9 +84,8 @@ const InsightInner = async() => {
 
             {/* ... Rest of your component (binding postData) ... */}
             <div className="container relative -top-22 lg:-top-50 mx-auto px-8 py-8 lg:py-12 max-w-7xl">
-                {/* Hero Section */}
+                {/* Main Title */}
                 <div className="space-y-6 lg:space-y-8">
-                    {/* Main Title */}
                     <h1 className="text-[#162F65] font-bold text-2xl sm:text-3xl md:text-4xl lg:text-[50px] leading-tight lg:leading-[60px] tracking-[1.65px] max-w-md lg:max-w-lg">
                         {postData.postTitle}
                     </h1>
@@ -92,7 +99,7 @@ const InsightInner = async() => {
                     <div className="w-full max-w-5xl">
                         {postData.postImage && (
                             <Image
-                                src={postData.postImage}
+                                src={urlFor(postData.postImage).url()} // Use urlFor for image optimization
                                 alt={postData.postTitle || "Post image"}
                                 width={1200}
                                 height={800}
@@ -122,7 +129,7 @@ const InsightInner = async() => {
                                 <div key={post.slug} className="relative group">
                                     <div className="relative w-full h-44 rounded-[10px] overflow-hidden">
                                         <Image
-                                            src={post.postImage}
+                                            src={urlFor(post.postImage).url()} // Use urlFor for image optimization
                                             alt={post.postTitle}
                                             width={600}
                                             height={600}
@@ -160,9 +167,42 @@ const InsightInner = async() => {
             <div className="-mt-15 lg:-mt-50">
                 <LinkedinSection />
             </div>
-
         </div>
     );
 };
 
-export default InsightInner;
+export default InsightInnerPage;
+
+export async function generateMetadata({
+    params,
+}: {
+    params: { id: string };
+}): Promise<Metadata> {
+    const slug = params.id;
+    const postData: PostDetails | null = await getPostData(slug);
+
+    if (!postData) {
+        return {
+            title: "Post Not Found",
+            description: "The requested blog post could not be found.",
+        };
+    }
+
+    // Use the fetched post data to populate the metadata
+    return {
+        title: postData.postTitle,
+        description: postData.Post_short_description,
+        openGraph: {
+            title: postData.postTitle,
+            description: postData.Post_short_description,
+            images: postData.postImage ? [urlFor(postData.postImage).url()] : [],
+            // Replace with your actual domain
+            url: `https://nexuslogix.com.au/insights/${slug}`,
+        },
+        alternates: {
+            // Replace with your actual domain
+            canonical: `https://nexuslogix.com.au/insights/${slug}`,
+        },
+    };
+}
+

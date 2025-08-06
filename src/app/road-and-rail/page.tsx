@@ -10,11 +10,13 @@ import ServiceCardRow from "@/Components/ServiceCardRow";
 import Quote from "@/Components/Quote";
 import HeroSection from "@/Components/HeroSection";
 import { getRoadAndRailData } from "@/sanity/lib/api";
+import { Metadata } from "next";
+import { urlFor } from "../../../client";
 
 
 interface HeroSection {
-    heroTitle?: string;
-    heroImage?: string;
+  heroTitle?: string;
+  heroImage?: string;
 }
 
 interface roadAndRailData {
@@ -52,7 +54,7 @@ interface roadAndRailData {
   }
 }
 
-const RoadAndRail = async() => {
+const RoadAndRail = async () => {
   const pageData = await getRoadAndRailData();
 
   if (!pageData) {
@@ -147,7 +149,7 @@ const RoadAndRail = async() => {
         <div className="max-w-7xl px-4 sm:px-6 lg:px-8 ">
           <PhotoDescriptionSection
             title={pageData.card_1_section?.card_1_title || "Road Transport"}
-            paragraph1={pageData.card_1_section?.card_1_description ||"From origin, where our agents secure sharp ex works rates, to port handover, to cross-country highways via hand-picked carriers, and all the way through to final-mile delivery - we manage it all and coordinate the entire journey with precision. "}
+            paragraph1={pageData.card_1_section?.card_1_description || "From origin, where our agents secure sharp ex works rates, to port handover, to cross-country highways via hand-picked carriers, and all the way through to final-mile delivery - we manage it all and coordinate the entire journey with precision. "}
             paragraph3={pageData.card_1_section?.card_1_description_3 || "Whether it's a 100 km hop or a 1,000 km haul, we assign the right operator for each shipment, ensuring reliable transit and competitive pricing every step of the way."}
             subtitle2={pageData.card_1_section?.card_1_subtitle || "Think only global players can offer true end-to-end logistics?"}
             subtitle1=""
@@ -221,3 +223,32 @@ const RoadAndRail = async() => {
 };
 
 export default RoadAndRail;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const pageData = await getRoadAndRailData();
+
+  // Set SEO data and fallback values
+  const seoData = pageData?.seo;
+  const defaultTitle = "Road & Rail Transport - Nexus Logix";
+  const defaultDescription = "Nexus Logix offers strategic road and rail transport services across Australia. From regional pickups to metro deliveries, we provide reliable, on-time freight solutions.";
+  const defaultKeywords = ["road transport", "rail freight", "road and rail transport", "Australian logistics", "domestic freight", "intermodal transport", "Nexus Logix"];
+  const defaultOgImage = pageData?.hero_section?.heroImage || "/roadAndRail_hero_banner.svg";
+  const defaultCanonicalUrl = "https://nexuslogix.com.au/road-and-rail";
+
+  
+  return {
+    title: seoData?.title || defaultTitle,
+    description: seoData?.description || defaultDescription,
+    keywords: seoData?.keywords || defaultKeywords,
+    openGraph: {
+      title: seoData?.openGraph?.ogTitle || seoData?.title || defaultTitle,
+      description: seoData?.openGraph?.ogDescription || seoData?.description || defaultDescription,
+      images: seoData?.openGraph?.ogImage ? [urlFor(seoData.openGraph?.ogImage).url()] : [defaultOgImage],
+      url: seoData?.canonicalUrl || defaultCanonicalUrl,
+      type: "website",
+    },
+    alternates: {
+      canonical: seoData?.canonicalUrl || defaultCanonicalUrl,
+    },
+  }
+}

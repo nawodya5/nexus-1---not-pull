@@ -222,16 +222,16 @@ const AirAndSeaFreight = async () => {
                     </div>
 
                     <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col items-center justify-center text-center">
-          <h2 className="text-xl sm:text-2xl lg:text-4xl xl:text-5xl font-medium text-white mb-4 sm:mb-6 lg:mb-8 leading-tight max-w-xl">
-            {pageData.bottom_banner?.banner_title || "Australian Expertise, Global Strength"}
-            {/* Global Reach
+                        <h2 className="text-xl sm:text-2xl lg:text-4xl xl:text-5xl font-medium text-white mb-4 sm:mb-6 lg:mb-8 leading-tight max-w-xl">
+                            {pageData.bottom_banner?.banner_title || "Australian Expertise, Global Strength"}
+                            {/* Global Reach
             <br />
             Australian Expertise */}
-          </h2>
-          <button className="bg-[#E8AF30] text-[#282828] px-6 hover:text-white cursor-pointer duration-300 transition sm:px-8 py-1 sm:py-2 text-sm sm:text-base lg:text-base rounded-lg font-normal">
-            {pageData.bottom_banner?.button_text || "Why Nexus"}
-          </button>
-        </div>
+                        </h2>
+                        <button className="bg-[#E8AF30] text-[#282828] px-6 hover:text-white cursor-pointer duration-300 transition sm:px-8 py-1 sm:py-2 text-sm sm:text-base lg:text-base rounded-lg font-normal">
+                            {pageData.bottom_banner?.button_text || "Why Nexus"}
+                        </button>
+                    </div>
                 </div>
             )}
             <Quote />
@@ -246,7 +246,7 @@ export default AirAndSeaFreight;
 
 // export async function generateMetadata(): Promise<Metadata> {
 //     try {
-//         const pageData: AirAndFreightData[] = await airAndFreightService();
+//         const pageData = await getAirAndFreightServiceData();
 //         const seoData = pageData.length > 0 ? pageData[0].seo : null;
 
 //         // Define fallback values for SEO in case Sanity data is missing
@@ -273,7 +273,7 @@ export default AirAndSeaFreight;
 //         };
 //     } catch (error) {
 //         console.error("Error generating metadata:", error);
-        
+
 //         // Return fallback metadata if there's an error
 //         return {
 //             title: "Air & Sea Freight Services - Your Company Name",
@@ -282,3 +282,34 @@ export default AirAndSeaFreight;
 //         };
 //     }
 // }
+
+
+
+
+export async function generateMetadata(): Promise<Metadata> {
+    const pageData = await getAirAndFreightServiceData();
+
+    // Set SEO data and fallback values
+    const seoData = pageData?.seo;
+    const defaultTitle = "Air & Sea Freight Services - Nexus Logix";
+    const defaultDescription = "Our air and sea freight services offer speed, reliability, and cost-effectiveness for all your logistics needs. We handle cargo of any size with precision and care.";
+    const defaultKeywords = ["air freight", "sea freight", "ocean cargo", "freight forwarding", "logistics", "shipping", "international shipping", "cargo services"];
+    const defaultOgImage = "/air-sea-freight.png";
+    const defaultCanonicalUrl = "https://nexuslogix.com.au/air-and-sea-freight";
+
+    return {
+        title: seoData?.title || defaultTitle,
+        description: seoData?.description || defaultDescription,
+        keywords: seoData?.keywords || defaultKeywords,
+        openGraph: {
+            title: seoData?.openGraph?.ogTitle || seoData?.title || defaultTitle,
+            description: seoData?.openGraph?.ogDescription || seoData?.description || defaultDescription,
+            images: seoData?.openGraph?.ogImage ? [urlFor(seoData.openGraph?.ogImage).url()] : [defaultOgImage],
+            url: seoData?.canonicalUrl || defaultCanonicalUrl,
+            type: "website",
+        },
+        alternates: {
+            canonical: seoData?.canonicalUrl || defaultCanonicalUrl,
+        },
+    }
+}

@@ -6,6 +6,7 @@ import React from "react";
 import Nav from "@/Components/Nav";
 // import ServiceCardRow from "@/Components/ServiceCardRow";
 import Quote from "@/Components/Quote";
+import { urlFor } from "../../../client";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
@@ -16,6 +17,8 @@ import Link from "next/link";
 import HeroSection from "@/Components/HeroSection";
 import { getWhyNexusData } from "@/sanity/lib/api";
 import WhyNexusTestimonialCarousel from "@/Components/WhyNexusTestimonialCarousel";
+import { get } from "http";
+import { Metadata } from "next";
 
 interface cardSection {
   card_1_title?: string;
@@ -678,7 +681,7 @@ const WhyNexus = async () => {
         {/*</div>*/}
       </div>
 
-      <Quote/>
+      <Quote />
       <div className="py-6 lg:py-12">
         <LinkedinSection />
       </div>
@@ -687,3 +690,31 @@ const WhyNexus = async () => {
 };
 
 export default WhyNexus;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const pageData = await getWhyNexusData();
+
+  // Set SEO data and fallback values
+  const seoData = pageData?.seo;
+  const defaultTitle = "Why Nexus Logix? Your Australian Freight Partner";
+  const defaultDescription = "Discover why Nexus Logix is the trusted choice for Australian freight and logistics. Learn about our core values, local expertise, and commitment to precision and sustainability.";
+  const defaultKeywords = ["Why Nexus", "Nexus Logix values", "Australian freight forwarder", "logistics partner", "supply chain expertise", "sustainability in logistics", "freight solutions"];
+  const defaultOgImage = pageData?.hero_section?.heroImage || "/why-nexus/banner.svg";
+  const defaultCanonicalUrl = "https://nexuslogix.com.au/why-nexus";
+
+  return {
+    title: seoData?.title || defaultTitle,
+    description: seoData?.description || defaultDescription,
+    keywords: seoData?.keywords || defaultKeywords,
+    openGraph: {
+      title: seoData?.openGraph?.ogTitle || seoData?.title || defaultTitle,
+      description: seoData?.openGraph?.ogDescription || seoData?.description || defaultDescription,
+      images: seoData?.openGraph?.ogImage ? [urlFor(seoData.openGraph?.ogImage).url()] : [defaultOgImage],
+      url: seoData?.canonicalUrl || defaultCanonicalUrl,
+      type: "website",
+    },
+    alternates: {
+      canonical: seoData?.canonicalUrl || defaultCanonicalUrl,
+    },
+  }
+}

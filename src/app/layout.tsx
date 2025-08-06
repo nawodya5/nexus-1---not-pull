@@ -1,14 +1,19 @@
-import type {Metadata} from "next";
+import type { Metadata } from "next";
 // import {Geist, Geist_Mono} from "next/font/google";
 import { Poppins } from 'next/font/google';
 import "./globals.css";
 import Footer from "@/Components/Footer";
 
+import { siteSettingsData } from "@/sanity/lib/api";
+
+
+const pageData = await siteSettingsData();
+
 
 const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'], // Add the weights you use
-  variable: '--font-poppins', // Optional: CSS variable name
+    subsets: ['latin'],
+    weight: ['400', '500', '600', '700'], // Add the weights you use
+    variable: '--font-poppins', // Optional: CSS variable name
 });
 // const geistSans = Geist({
 //     variable: "--font-geist-sans",
@@ -26,19 +31,29 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
+
+    
+    children,
+}: Readonly<{
     children: React.ReactNode;
 }>) {
+
+    
     return (
         <html lang="en">
-        <body
-            className={`${poppins.variable}`}
-        >
-        {/*<Navbar/>*/}
-        {children}
-        <Footer/>
-        </body>
+            <head>
+                <title>{pageData?.siteName}</title>
+                
+            </head>
+            <body
+                className={`${poppins.variable}`}
+            >
+                {/*<Navbar/>*/}
+                {children}
+                
+                <Footer />
+                <script>{`window.__PAGE_DATA__ = ${JSON.stringify(pageData?.script)}`}</script>
+            </body>
         </html>
     );
 }

@@ -7,6 +7,7 @@ import LinkedinSection from "@/Components/LinkedinSection";
 import Quote from "@/Components/Quote";
 import CountUp from "react-countup";
 import Nav from "@/Components/Nav";
+import { urlFor } from "../../client";
 
 import Slider from "react-slick";
 
@@ -14,6 +15,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import { getHomePageData } from '../../src/sanity/lib/api'
+import { Metadata } from "next";
 // import { home } from "@/sanity/lib/api";
 // import { p } from "framer-motion/client";
 
@@ -1189,3 +1191,33 @@ export const home = async function Home() {
     </div>
   );
 }
+
+
+
+// export async function generateMetadata(): Promise<Metadata> {
+//     const pageData = await getHomePageData();
+
+//     // Set SEO data and fallback values
+//     const seoData = pageData?.seo;
+//     const defaultTitle = "Nexus Logix";
+//     const defaultDescription = "Get in touch with Nexus Logix for all your logistics needs. Our team is ready to assist you with air and sea freight services.";
+//     const defaultKeywords = ["contact", "customer support", "logistics", "freight forwarding", "shipping"];
+//     const defaultOgImage = "/contact-us.png";
+//     const defaultCanonicalUrl = "https://nexuslogix.com.au";
+
+//     return {
+//         title: seoData?.title || defaultTitle,
+//         description: seoData?.description || defaultDescription,
+//         keywords: seoData?.keywords || defaultKeywords,
+//         openGraph: {
+//             title: seoData?.openGraph?.ogTitle || seoData?.title || defaultTitle,
+//             description: seoData?.openGraph?.ogDescription || seoData?.description || defaultDescription,
+//             images: seoData?.openGraph?.ogImage ? [urlFor(seoData.openGraph?.ogImage).url()] : [defaultOgImage],
+//             url: seoData?.canonicalUrl || defaultCanonicalUrl,
+//             type: "website",
+//         },
+//         alternates: {
+//             canonical: seoData?.canonicalUrl || defaultCanonicalUrl,
+//         },
+//     }
+// }

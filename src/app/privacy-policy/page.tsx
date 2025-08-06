@@ -5,15 +5,17 @@ import Nav from "@/Components/Nav";
 import HeroSection from "@/Components/HeroSection";
 import { getPrivacyPolicyData } from "@/sanity/lib/api";
 import { PortableText } from "@portabletext/react";
+import { Metadata } from "next";
+import { urlFor } from "../../../client";
 
 
 interface HeroSection {
-    heroTitle?: string;
-    heroImage?: string;
+  heroTitle?: string;
+  heroImage?: string;
 }
 
 
-const PrivacyPolicy = async() => {
+const PrivacyPolicy = async () => {
   const pageData = await getPrivacyPolicyData();
 
   if (!pageData) {
@@ -39,10 +41,10 @@ const PrivacyPolicy = async() => {
                 {pageData.hero_section?.heroTitle || "Privacy Policy"}
               </h1>
 
-                <PortableText value={pageData.privacy_policy ?? []} />
-              
+              <PortableText value={pageData.privacy_policy ?? []} />
 
-              
+
+
             </section>
           </div>
         </div>
@@ -56,3 +58,31 @@ const PrivacyPolicy = async() => {
 };
 
 export default PrivacyPolicy;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const pageData = await getPrivacyPolicyData();
+
+  // Set SEO data and fallback values
+  const seoData = pageData?.seo;
+  const defaultTitle = "Privacy Policy - Nexus Logix";
+  const defaultDescription = "Read the official privacy policy of Nexus Logix to understand how we collect, use, and protect your personal information on our website and through our services.";
+  const defaultKeywords = ["privacy policy", "data protection", "privacy statement", "Nexus Logix privacy", "user data", "website privacy"];
+  const defaultOgImage = pageData?.hero_section?.heroImage || "/privacy-policy-header.svg";
+  const defaultCanonicalUrl = "https://nexuslogix.com.au/privacy-policy";
+
+  return {
+    title: seoData?.title || defaultTitle,
+    description: seoData?.description || defaultDescription,
+    keywords: seoData?.keywords || defaultKeywords,
+    openGraph: {
+      title: seoData?.openGraph?.ogTitle || seoData?.title || defaultTitle,
+      description: seoData?.openGraph?.ogDescription || seoData?.description || defaultDescription,
+      images: seoData?.openGraph?.ogImage ? [urlFor(seoData.openGraph?.ogImage).url()] : [defaultOgImage],
+      url: seoData?.canonicalUrl || defaultCanonicalUrl,
+      type: "website",
+    },
+    alternates: {
+      canonical: seoData?.canonicalUrl || defaultCanonicalUrl,
+    },
+  }
+}

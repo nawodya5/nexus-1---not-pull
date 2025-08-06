@@ -21,19 +21,20 @@ import {
     privacyPolicy,
     insights,
     Post,
+    siteSettingsQuery
 } from './queries';
 
 
 // Import types
 import {
     CardSection,
-    SEOData,
     BottomBanner,
     HeroSection,
     AirAndFreightData,
     contactItem,
     SeoData,
-    pageData,
+    HomePageData,
+    ContactUspageData,
     FormData,
     AccordianItem,
     CustomsData,
@@ -58,16 +59,33 @@ import {
     LinkedinSectionData,
     photoSectionDescriptionItem,
     ServiceCardData,
+    footerData,
+    siteSettings,
 
 } from '@/sanity/types';
+
+
+
+
+
+export async function siteSettingsData(): Promise<siteSettings | null> {
+    try {
+        const data = await sanityClient.fetch(siteSettingsQuery);
+        console.log("Fetched site settings data:", data);
+        return data && data.length > 0 ? data[0] : null;
+    } catch (error) {
+        console.error("Error fetching site settings data:", error);
+        return null;
+    }
+}
 
 // The 'sanityClient' variable is imported and will now be directly used in the fetch functions below.
 
 /**
  * Fetches data for the Home Page.
- * @returns {Promise<pageData | null>} The home page data or null if an error occurs.
+ * @returns {Promise<HomePageData | null>} The home page data or null if an error occurs.
  */
-export async function getHomePageData(): Promise<pageData | null> {
+export async function getHomePageData(): Promise<HomePageData | null> {
     try {
         const data = await sanityClient.fetch(homePage);
         console.log("Fetched home page data:", data);
@@ -81,15 +99,19 @@ export async function getHomePageData(): Promise<pageData | null> {
 
 
 
-/**
- * Fetches data for the Home Page.
- * @returns {Promise<pageData | null>} The home page data or null if an error occurs.
- */
 export async function getPostData(slug: string | undefined): Promise<PostDetails | null> {
     try {
+        // Add a check to ensure slug is defined before fetching
+        if (!slug) {
+            console.warn("Slug is undefined, cannot fetch post data.");
+            return null; // Return null if slug is not defined
+        }
         const data = await sanityClient.fetch(Post, { slug });
         console.log("Fetched post data:", data);
-        return data && data.length > 0 ? data[0] : null;
+        // FIX: If the Sanity query already uses [0] to return a single object,
+        // then 'data' will be the object itself, not an array.
+        // So, we should just return 'data' if it's not null/undefined.
+        return data || null;
     } catch (error) {
         console.error("Error fetching post data:", error);
         return null;
@@ -98,12 +120,11 @@ export async function getPostData(slug: string | undefined): Promise<PostDetails
 
 
 
-
 /**
  * Fetches data for the Home Page.
  * @returns {Promise<pageData | null>} The home page data or null if an error occurs.
  */
-export async function getInsightPageData(): Promise<pageData | null> {
+export async function getInsightPageData(): Promise<insightData | null> {
     try {
         const data = await sanityClient.fetch(insights);
         console.log("Fetched insights page data:", data);
@@ -131,11 +152,15 @@ export async function getAirAndFreightServiceData(): Promise<AirAndFreightData |
     }
 }
 
+
+
+
+
 /**
  * Fetches data for the Contact Us page.
- * @returns {Promise<contactItem | null>} The contact us data or null if an error occurs.
+ * @returns {Promise<ContactUspageData | null>} The contact us data or null if an error occurs.
  */
-export async function getContactUsData(): Promise<contactItem | null> {
+export async function getContactUsData(): Promise<ContactUspageData | null> {
     try {
         const data = await sanityClient.fetch(contactUs);
         console.log("Fetched contact us data:", data);
@@ -164,10 +189,10 @@ export async function getCustomsData(): Promise<CustomsData | null> {
 }
 
 /**
- * Fetches data for the Footer section.
- * @returns {Promise<any | null>} The footer data or null if an error occurs. (Assuming footer has a specific type, replace 'any')
+ * Fetches data for the Air and Freight Service page.
+ * @returns {Promise<AirAndFreightData | null>} The air and freight service data or null if an error occurs.
  */
-export async function getFooterData(): Promise<any | null> {
+export async function getFooterData(): Promise<footerData | null> {
     try {
         const data = await sanityClient.fetch(footer);
         console.log("Fetched footer data:", data);
@@ -267,7 +292,7 @@ export async function getTrackAndTraceData(): Promise<trackAndTraceData | null> 
     try {
         const data = await sanityClient.fetch(trackAndTrace);
         console.log("Fetched track and trace data:", data);
-        // Assuming trackAndTrace query returns an array, take the first item
+
         return data && data.length > 0 ? data[0] : null;
     } catch (error) {
         console.error("Error fetching track and trace data:", error);

@@ -7,11 +7,13 @@ import React from "react";
 import Link from "next/link";
 import HeroSection from "@/Components/HeroSection";
 import { getInsightPageData } from "@/sanity/lib/api";
+import { Metadata } from "next";
+import { urlFor } from "../../../client"; // Adjust the import path as necessary
 
 
 interface HeroSection {
-    heroTitle?: string;
-    heroImage?: string;
+  heroTitle?: string;
+  heroImage?: string;
 }
 interface insightData {
   hero_section?: HeroSection;
@@ -58,16 +60,16 @@ interface insightData {
   }[];
 }
 
-const InsightsPage = async() => {
+const InsightsPage = async () => {
 
   const pageData: insightData | null = await getInsightPageData();
   if (!pageData) {
-        return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="text-lg">No content available.</div>
-            </div>
-        );
-    }
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-lg">No content available.</div>
+      </div>
+    );
+  }
   // const [pageData, setPageData] = useState<insightData | null>(null);
   // const [loading, setLoading] = useState(true);
   // const [error, setError] = useState<string | null>(null);
@@ -496,3 +498,31 @@ const InsightsPage = async() => {
 };
 
 export default InsightsPage;
+
+
+export async function generateMetadata(): Promise<Metadata> {
+  const pageData = await getInsightPageData();
+
+  // Set SEO data and fallback values
+  const seoData = pageData?.seo;
+  const defaultTitle = "Insights & News - Nexus Logix";
+  const defaultDescription = "Stay ahead with the latest logistics news, market trends, and expert insights from Nexus Logix. Our articles help you make smarter supply chain decisions.";
+  const defaultKeywords = ["logistics insights", "freight news", "supply chain trends", "Australia logistics", "shipping news", "Nexus Logix blog"];
+  const defaultOgImage = pageData?.hero_section?.heroImage || "/insights-banner.svg";
+  const defaultCanonicalUrl = "https://nexuslogix.com.au/insights";
+  return {
+    title: seoData?.title || defaultTitle,
+    description: seoData?.description || defaultDescription,
+    keywords: seoData?.keywords || defaultKeywords,
+    openGraph: {
+      title: seoData?.openGraph?.ogTitle || seoData?.title || defaultTitle,
+      description: seoData?.openGraph?.ogDescription || seoData?.description || defaultDescription,
+      images: seoData?.openGraph?.ogImage ? [urlFor(seoData.openGraph?.ogImage).url()] : [defaultOgImage],
+      url: seoData?.canonicalUrl || defaultCanonicalUrl,
+      type: "website",
+    },
+    alternates: {
+      canonical: seoData?.canonicalUrl || defaultCanonicalUrl,
+    },
+  }
+}
