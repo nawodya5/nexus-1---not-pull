@@ -305,6 +305,16 @@ export const homePage = `
   heroDescription,
   hero_button_text,
   hero_button_link,
+  heroImagesForDesktop[] {
+    asset->{
+      url
+    }
+  },
+  heroImagesForMobile[] {
+    asset->{
+      url
+    }
+  },
   icon_card_1{
    
     card_title,
@@ -331,7 +341,7 @@ export const homePage = `
     "card_icon": card_icon.asset->url
   },
   icon_card_5{
-    title,
+    card_title,
     card_description_1,
     card_description_2,
     "card_icon": card_icon.asset->url
@@ -344,6 +354,8 @@ export const homePage = `
   section_2_badge_text_row_4,
   section_2_badge_text_row_5,
   section_2_description,
+  section_2_description_2,
+  section_2_description_3,
   section_2_subtitle,
   section_2_button_text,
   section_2_button_link,

@@ -67,7 +67,7 @@ import {
  * Fetches data for the Home Page.
  * @returns {Promise<pageData | null>} The home page data or null if an error occurs.
  */
-export async function getHomePageData(): Promise<pageData | null> {
+export async function getHomePageData() {
     try {
         const data = await sanityClient.fetch(homePage);
         console.log("Fetched home page data:", data);
