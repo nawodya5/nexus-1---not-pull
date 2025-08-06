@@ -7,6 +7,8 @@ import Quote from "@/Components/Quote";
 import Link from "next/link";
 import HeroSection from "@/Components/HeroSection";
 import { getServicesData } from "@/sanity/lib/api";
+import { Metadata } from "next";
+import { urlFor } from "../../../client";
 
 interface ServiceCard {
   card_label?: string;
@@ -288,3 +290,32 @@ const ServicesPage = async () => {
 };
 
 export default ServicesPage;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const pageData = await getServicesData();
+
+  // Set SEO data and fallback values
+  const seoData = pageData?.seo;
+  const defaultTitle = "Logistics Services & Solutions - Nexus Logix";
+  const defaultDescription = "Explore the full range of logistics services offered by Nexus Logix, including air and sea freight, customs clearance, 3PL warehousing, and road and rail transport solutions.";
+  const defaultKeywords = ["logistics services", "air freight", "sea freight", "customs clearance", "3PL", "warehousing", "road transport", "rail freight", "supply chain solutions"];
+  const defaultOgImage = pageData?.hero_section?.heroImage || "/services_hero_banner.svg";
+  const defaultCanonicalUrl = "https://nexuslogix.com.au/services";
+
+
+  return {
+    title: seoData?.title || defaultTitle,
+    description: seoData?.description || defaultDescription,
+    keywords: seoData?.keywords || defaultKeywords,
+    openGraph: {
+      title: seoData?.openGraph?.ogTitle || seoData?.title || defaultTitle,
+      description: seoData?.openGraph?.ogDescription || seoData?.description || defaultDescription,
+      images: seoData?.openGraph?.ogImage ? [urlFor(seoData.openGraph?.ogImage).url()] : [defaultOgImage],
+      url: seoData?.canonicalUrl || defaultCanonicalUrl,
+      type: "website",
+    },
+    alternates: {
+      canonical: seoData?.canonicalUrl || defaultCanonicalUrl,
+    },
+  }
+}

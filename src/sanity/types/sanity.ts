@@ -1,68 +1,68 @@
-import {TypedObject} from "@portabletext/types";
+import { TypedObject } from "@portabletext/types";
 import { PortableText, PortableTextBlock } from "@portabletext/react";
 
 
 // air and freight data interface
 export interface CardSection {
-    card_1_title?: string;
-    card_1_subtitle?: string;
-    card_1_description?: string;
-    card_1_description_2?: string;
-    card_1_button_text?: string;
-    card_1_button_link?: string;
-    card_1_image?: string;
-    card_2_title?: string;
-    card_2_subtitle?: string;
-    card_2_description?: string;
-    card_2_description_2?: string;
-    card_2_button_text?: string;
-    card_2_button_link?: string;
-    card_2_image?: string;
-    card_3_title?: string;
-    card_3_subtitle_1?: string;
-    card_3_description_1?: string;
-    card_3_subtitle_2?: string;
-    card_3_description_2?: string;
-    card_3_button_text?: string;
-    card_3_button_link?: string;
-    card_3_image?: string;
+  card_1_title?: string;
+  card_1_subtitle?: string;
+  card_1_description?: string;
+  card_1_description_2?: string;
+  card_1_button_text?: string;
+  card_1_button_link?: string;
+  card_1_image?: string;
+  card_2_title?: string;
+  card_2_subtitle?: string;
+  card_2_description?: string;
+  card_2_description_2?: string;
+  card_2_button_text?: string;
+  card_2_button_link?: string;
+  card_2_image?: string;
+  card_3_title?: string;
+  card_3_subtitle_1?: string;
+  card_3_description_1?: string;
+  card_3_subtitle_2?: string;
+  card_3_description_2?: string;
+  card_3_button_text?: string;
+  card_3_button_link?: string;
+  card_3_image?: string;
 }
 
 
 
-export interface SEOData {
-    page?: string;
-    title?: string;
-    description?: string;
-    keywords?: string[];
-    ogTitle?: string;
-    ogDescription?: string;
-    ogImage?: any; // Sanity image object
-    canonicalUrl?: string;
-}
+// export interface SEOData {
+//   page?: string;
+//   title?: string;
+//   description?: string;
+//   keywords?: string[];
+//   ogTitle?: string;
+//   ogDescription?: string;
+//   ogImage?: any;
+//   canonicalUrl?: string;
+// }
 
 export interface BottomBanner {
-    banner_title?: string;
-    button_text?: string;
-    button_link?: string;
-    image?: string;
-    imageAlt?: string;
+  banner_title?: string;
+  button_text?: string;
+  button_link?: string;
+  image?: string;
+  imageAlt?: string;
 }
 
 export interface HeroSection {
-    heroTitle?: string;
-    heroImage?: string;
+  heroTitle?: string;
+  heroImage?: string;
 }
 
 export interface AirAndFreightData {
-    hero_section?: HeroSection;
-    heading_title?: string;
-    heading_description?: string;
-    card_1_section?: CardSection;
-    card_2_section?: CardSection;
-    card_3_section?: CardSection;
-    bottom_banner?: BottomBanner;
-    seo?: SEOData; // Add SEO data to the interface
+  hero_section?: HeroSection;
+  heading_title?: string;
+  heading_description?: string;
+  card_1_section?: CardSection;
+  card_2_section?: CardSection;
+  card_3_section?: CardSection;
+  bottom_banner?: BottomBanner;
+  seo?: SeoData; 
 }
 
 
@@ -74,21 +74,25 @@ export interface contactItem {
   contact_info?: string;
 }
 
+export interface openGraph {
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: { asset: { _ref: string } };
+}
+
 export interface SeoData {
   title?: string;
   description?: string;
   keywords?: string[];
-  ogTitle?: string;
-  ogDescription?: string;
-  ogImage?: { asset: { _ref: string } }; // Sanity image format
   canonicalUrl?: string;
+  openGraph?: openGraph;
 }
 // export interface HeroSection {
 //   heroTitle?: string;
 //   heroImage?: string;
 // }
 
-export interface pageData {
+export interface ContactUspageData {
   hero_section?: HeroSection;
   contact_form_title: string;
   contact_form_description_1: string;
@@ -101,6 +105,8 @@ export interface pageData {
   facebook_link?: string;
   instagram_link?: string;
   map_link?: string;
+  seo?: SeoData; 
+
 }
 
 export interface FormData {
@@ -185,12 +191,15 @@ export interface CustomsData {
     card_image?: string;
   };
   bottom_banner?: BottomBanner;
+  seo?: SeoData;
 }
 
 
 
+export interface HomePageData {
 
-
+  seo?: SeoData;
+}
 
 
 
@@ -237,16 +246,17 @@ export interface insightData {
     slug?: string;
     postImage?: string;
   }[];
+  seo?: SeoData;
 }
 
 
 // insight inner (posts) interface
 export interface RelatedPost {
-    postTitle: string;
-    Post_short_description: string;
-    postContent: any;
-    slug: string;
-    postImage: string;
+  postTitle: string;
+  Post_short_description: string;
+  postContent: any;
+  slug: string;
+  postImage: string;
 }
 
 
@@ -256,12 +266,12 @@ export interface RelatedPost {
 // }
 
 export interface PostDetails {
-    postTitle: string;
-    Post_short_description: string;
-    postContent: any;
-    slug: string;
-    postImage: string;
-    related_posts?: RelatedPost[];
+  postTitle: string;
+  Post_short_description: string;
+  postContent: any;
+  slug: string;
+  postImage: string;
+  related_posts?: RelatedPost[];
 }
 
 
@@ -326,6 +336,8 @@ export interface IntegratedLogisticsData {
     image?: string;
     imageAlt?: string;
   }
+
+  seo?: SeoData;
 }
 
 
@@ -360,6 +372,7 @@ export interface LeadershipPageData {
   terms_member_7?: TeamMemberSanityData;
   terms_member_8?: TeamMemberSanityData;
   terms_member_9?: TeamMemberSanityData;
+  seo?: SeoData;
 }
 
 // Unified Team Member type for easy mapping
@@ -385,6 +398,7 @@ export interface TeamMember {
 export interface PrivacyPolicyData {
   hero_section?: HeroSection;
   privacy_policy?: PortableTextBlock[];
+  seo?: SeoData;
 }
 
 
@@ -408,6 +422,7 @@ export interface roadAndRailData {
     card_1_button_text?: string;
     card_1_button_link?: string;
     card_1_image?: string;
+    
   },
 
 
@@ -430,6 +445,8 @@ export interface roadAndRailData {
     image?: string;
     imageAlt?: string;
   }
+
+  seo?: SeoData;
 }
 
 
@@ -466,6 +483,7 @@ export interface ServiceData {
   service_card_3?: ServiceCard;
   service_card_4?: ServiceCard;
   bottom_banner?: BottomBanner;
+  seo?: SeoData;
 }
 
 export interface Service {
@@ -486,13 +504,14 @@ export interface Service {
 export interface TermsAndConditionsData {
   hero_section?: HeroSection;
   terms_and_conditions?: PortableTextBlock[];
+  seo?: SeoData;
 }
 
 
 // track and trace data interface
 export interface IconCard {
   card_title?: string;
-  card_description?: string;
+  card_description_1?: string;
   card_icon?: string;
 }
 
@@ -537,18 +556,19 @@ export interface trackAndTraceData {
     image?: string;
     imageAlt?: string;
   }
+  seo?: SeoData;
 }
 
 export interface photoSectionDescriptionItem {
-    title: string;
-    paragraph_1: string;
-    paragraph_2: string;
-    imageSrc: string;
-    imageAlt: string;
-    reverse: boolean;
-    buttonTitle: string;
-    buttonLink: string;
-  }
+  title: string;
+  paragraph_1: string;
+  paragraph_2: string;
+  imageSrc: string;
+  imageAlt: string;
+  reverse: boolean;
+  buttonTitle: string;
+  buttonLink: string;
+}
 
 
 
@@ -630,11 +650,12 @@ export interface whyNexusData {
     image?: string;
     imageAlt?: string;
   };
+  seo?: SeoData;
 }
 
 
 export interface LinkedinSectionData {
-    section_title?: string;
-    section_description?: string;
-    button_link?: string;
+  section_title?: string;
+  section_description?: string;
+  button_link?: string;
 }

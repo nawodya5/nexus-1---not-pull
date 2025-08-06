@@ -11,6 +11,8 @@ import Link from "next/link";
 import Accordian from "@/Components/Accordian";
 import HeroSection from "@/Components/HeroSection";
 import { getCustomsData } from "@/sanity/lib/api";
+import { urlFor } from "../../../client";
+import { Metadata } from "next";
 
 
 
@@ -28,8 +30,8 @@ interface AccordianItem {
 }
 
 interface HeroSection {
-    heroTitle?: string;
-    heroImage?: string;
+  heroTitle?: string;
+  heroImage?: string;
 }
 
 interface CustomsData {
@@ -63,16 +65,16 @@ interface CustomsData {
   bottom_banner?: BottomBanner;
 }
 
-const CustomsPage = async() => {
+const CustomsPage = async () => {
 
   const pageData: CustomsData | null = await getCustomsData();
   if (!pageData) {
-        return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="text-lg">No content available.</div>
-            </div>
-        );
-    }
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-lg">No content available.</div>
+      </div>
+    );
+  }
 
   // const [pageData, setPageData] = useState<CustomsData | null>(null);
   // const [loading, setLoading] = useState(true);
@@ -276,7 +278,7 @@ const CustomsPage = async() => {
         <div className="relative h-64 sm:h-80 lg:h-96 overflow-hidden">
           <div className="absolute inset-0">
             <Image
-              src={pageData.bottom_banner?.image ||"/customs_banner.png"}
+              src={pageData.bottom_banner?.image || "/customs_banner.png"}
               alt={pageData.bottom_banner?.imageAlt || "Airport"}
               width={1000}
               height={400}
@@ -288,7 +290,7 @@ const CustomsPage = async() => {
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col items-center justify-center text-center">
             <h2 className="text-xl sm:text-2xl lg:text-4xl xl:text-5xl font-medium text-white mb-4 sm:mb-6 lg:mb-8 leading-tight max-w-xl">
               {pageData.bottom_banner?.banner_title || "Australian Expertise, Global Strength"}
-              
+
               {/* Australian Expertise,
               <br />
               Global Strength */}
@@ -314,3 +316,33 @@ const CustomsPage = async() => {
 };
 
 export default CustomsPage;
+
+
+export async function generateMetadata(): Promise<Metadata> {
+  const pageData = await getCustomsData();
+
+  // Set SEO data and fallback values
+  const seoData = pageData?.seo;
+  const defaultTitle = "Customs Clearance & Compliance - Nexus Logix";
+  const defaultDescription = "Simplify international trade with Nexus Logix. Our customs specialists handle all aspects of customs clearance, border processing, and compliance for a seamless supply chain.";
+  const defaultKeywords = ["customs clearance", "border processing", "australian trusted trader", "supply chain audit", "import duties", "freight forwarding australia"];
+  const defaultOgImage = "/customs_hero_banner.svg"; // A relevant image for the page
+  const defaultCanonicalUrl = "https://nexuslogix.com.au/customs"; // The canonical URL for this page
+
+
+  return {
+    title: seoData?.title || defaultTitle,
+    description: seoData?.description || defaultDescription,
+    keywords: seoData?.keywords || defaultKeywords,
+    openGraph: {
+      title: seoData?.openGraph?.ogTitle || seoData?.title || defaultTitle,
+      description: seoData?.openGraph?.ogDescription || seoData?.description || defaultDescription,
+      images: seoData?.openGraph?.ogImage ? [urlFor(seoData.openGraph?.ogImage).url()] : [defaultOgImage],
+      url: seoData?.canonicalUrl || defaultCanonicalUrl,
+      type: "website",
+    },
+    alternates: {
+      canonical: seoData?.canonicalUrl || defaultCanonicalUrl,
+    },
+  }
+}

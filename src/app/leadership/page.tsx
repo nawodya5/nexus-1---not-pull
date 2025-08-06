@@ -8,6 +8,8 @@ import Link from "next/link";
 import HeroSection from "@/Components/HeroSection";
 
 import { getLeadershipData } from "@/sanity/lib/api";
+import { Metadata } from "next";
+import { urlFor } from "../../../client";
 
 interface HeroSection {
   heroTitle?: string;
@@ -200,3 +202,32 @@ const LeadershipPage = async () => {
 };
 
 export default LeadershipPage;
+
+
+export async function generateMetadata(): Promise<Metadata> {
+  const pageData = await getLeadershipData();
+
+  // Set SEO data and fallback values
+  const seoData = pageData?.seo;
+  const defaultTitle = "Leadership Team - Nexus Logix";
+  const defaultDescription = "Meet the leadership team at Nexus Logix. Our experts are dedicated to providing personalized service and keeping your supply chain running smoothly.";
+  const defaultKeywords = ["leadership team", "Nexus Logix team", "logistics experts", "supply chain management", "freight forwarding leadership", "company leadership"];
+  const defaultOgImage = pageData?.hero_section?.heroImage || "/leadership.svg";
+  const defaultCanonicalUrl = "https://nexuslogix.com.au/leadership";
+
+  return {
+    title: seoData?.title || defaultTitle,
+    description: seoData?.description || defaultDescription,
+    keywords: seoData?.keywords || defaultKeywords,
+    openGraph: {
+      title: seoData?.openGraph?.ogTitle || seoData?.title || defaultTitle,
+      description: seoData?.openGraph?.ogDescription || seoData?.description || defaultDescription,
+      images: seoData?.openGraph?.ogImage ? [urlFor(seoData.openGraph?.ogImage).url()] : [defaultOgImage],
+      url: seoData?.canonicalUrl || defaultCanonicalUrl,
+      type: "website",
+    },
+    alternates: {
+      canonical: seoData?.canonicalUrl || defaultCanonicalUrl,
+    },
+  }
+}
