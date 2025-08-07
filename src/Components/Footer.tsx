@@ -496,7 +496,7 @@ import { getFooterData } from "@/sanity/lib/api";
 
 // }
 
-const Footer = async() => {
+const Footer = async () => {
 
     // const [sectionData, setSectionData] = useState<FooterData | null>(null);
     // const [loading, setLoading] = useState(true);
@@ -509,7 +509,7 @@ const Footer = async() => {
     //             setLoading(true);
     //             const data = await footer();
 
-               
+
     //             if (data && data.length > 0) {
     //                 setSectionData(data[0]);
     //             } else {
@@ -584,16 +584,18 @@ const Footer = async() => {
                         className="flex flex-col items-center lg:flex-row lg:justify-between mt-6 mb-6 sm:mb-8 lg:mb-10">
                         <div className="mb-6 sm:mb-8 lg:mb-0 lg:mr-12 text-center lg:text-left">
                             <p className="text-sm sm:text-base lg:text-lg font-medium max-w-2xl sm:max-w-3xl poppins">
-                                Tell us your requirement and one of our experts will be in
-                                touch to learn more about your business and draw up a solution
-                                that addresses your unique needs
+                                {footerData.footer_description || "Tell us your requirement and one of our experts will be in touch to learn more about your business and draw up a solution that addresses your unique needs"}
                             </p>
                         </div>
-                        <button
-                            className="bg-white text-[#162F65] hover:bg-black hover:border-1 hover:border-white hover:text-white transition duration-300 px-6 py-2 sm:px-15 sm:py-3 text-base sm:text-lg lg:text-xl rounded-lg font-medium flex-shrink-0"
-                        >
-                            Talk to Us
-                        </button>
+                        <Link href={footerData.footer_button_link || "/contact-us"}>
+
+
+                            <button
+                                className="bg-white text-[#162F65] hover:bg-black hover:border-1 hover:border-white hover:text-white transition duration-300 px-6 py-2 sm:px-15 sm:py-3 text-base sm:text-lg lg:text-xl rounded-lg font-medium flex-shrink-0"
+                            >
+                                {footerData.footer_button_text || "Talk to Us"}
+                            </button>
+                        </Link>
                     </div>
 
                     <hr className="border-white mb-8 sm:mb-10 lg:mb-12" />
@@ -611,16 +613,14 @@ const Footer = async() => {
                                 className="h-16 sm:h-20 lg:h-24 w-auto mx-auto sm:mx-0 mb-4 sm:mb-6"
                             />
                             <p className="text-xs sm:text-sm leading-relaxed max-w-xs mx-auto sm:mx-0">
-                                A proudly Australian logistics pit crew with a global reach,
-                                delivering agile, reliable freight solutions that keep your
-                                supply chain moving.
+                                {footerData.footer_sub_description || "A proudly Australian logistics pit crew with a global reach, delivering agile, reliable freight solutions that keep your supply chain moving."}
                             </p>
                         </div>
 
                         {/* Links */}
                         <div>
                             <h4 className="text-base sm:text-xl lg:text-2xl font-bold mb-4 sm:mb-6 text-center sm:text-left">
-                                Links
+                                {footerData.footer_column_1_title || "Links"}
                             </h4>
                             <div className="space-y-2 text-center sm:text-left">
                                 <Link
@@ -689,7 +689,7 @@ const Footer = async() => {
                         {/* Services */}
                         <div>
                             <h4 className="text-base sm:text-xl lg:text-2xl font-bold mb-4 sm:mb-6 text-center sm:text-left">
-                                Services
+                               { footerData.footer_column_2_title || " Services"}
                             </h4>
                             <div className="space-y-2 text-center sm:text-left">
                                 <Link

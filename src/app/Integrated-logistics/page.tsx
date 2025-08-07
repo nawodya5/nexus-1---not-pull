@@ -10,12 +10,14 @@ import ServiceCardRow from "@/Components/ServiceCardRow";
 import Quote from "@/Components/Quote";
 import HeroSection from "@/Components/HeroSection";
 import { getIntergratedLogistics } from "@/sanity/lib/api";
+import { Metadata } from "next";
+import { urlFor } from "../../../client";
 
 
 
 interface HeroSection {
-    heroTitle?: string;
-    heroImage?: string;
+  heroTitle?: string;
+  heroImage?: string;
 }
 
 interface IntegratedLogisticsData {
@@ -74,17 +76,17 @@ interface IntegratedLogisticsData {
 }
 
 
-const IntegratedLogistics = async() => {
+const IntegratedLogistics = async () => {
 
   const pageData: IntegratedLogisticsData | null = await getIntergratedLogistics();
 
   if (!pageData) {
-        return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="text-lg">No content available.</div>
-            </div>
-        );
-    }
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-lg">No content available.</div>
+      </div>
+    );
+  }
   // const [pageData, setPageData] = useState<IntegratedLogisticsData | null>(null);
   // const [loading, setLoading] = useState(true);
   // const [error, setError] = useState<string | null>(null);
@@ -169,14 +171,14 @@ const IntegratedLogistics = async() => {
         {/* first card */}
         <div className="max-w-7xl px-4 sm:px-6 lg:px-8 whitespace-pre-line">
           <PhotoDescriptionSection
-            title={pageData.card_1_section?.card_1_title ||"3PL & Warehousing"}
-            paragraph1={pageData.card_1_section?.card_1_description ||"Scalable, secure, and strategically positioned, our warehousing network is designed to flex with your business. From pallet storage to bonded facilities, our third-party logistics solutions ensure your goods are always accessible, protected, and ready to move."
-            
-              
+            title={pageData.card_1_section?.card_1_title || "3PL & Warehousing"}
+            paragraph1={pageData.card_1_section?.card_1_description || "Scalable, secure, and strategically positioned, our warehousing network is designed to flex with your business. From pallet storage to bonded facilities, our third-party logistics solutions ensure your goods are always accessible, protected, and ready to move."
+
+
             }
-            subtitle2={pageData.card_1_section?.card_1_subtitle ||"Think flexible warehousing is only for enterprise giants?"}
+            subtitle2={pageData.card_1_section?.card_1_subtitle || "Think flexible warehousing is only for enterprise giants?"}
             subtitle1=""
-            paragraph2={pageData.card_1_section?.card_1_description_2 ||"Not at all. Our local presence and global reach mean you can access enterprise-grade service without the bloated overhead."}
+            paragraph2={pageData.card_1_section?.card_1_description_2 || "Not at all. Our local presence and global reach mean you can access enterprise-grade service without the bloated overhead."}
             paragraph3=""
             buttonText={pageData.card_1_section?.card_1_button_text || "Explore Contract Logistics"}
             buttonLink={pageData.card_1_section?.card_1_button_link || "/air-freight-quote"}
@@ -220,7 +222,7 @@ const IntegratedLogistics = async() => {
         {/* fourth card */}
         <div className="max-w-7xl px-4 sm:px-6 lg:px-8 ">
           <PhotoDescriptionSection
-            title={pageData.card_4_section?.card_4_title||"Special Project Transport"}
+            title={pageData.card_4_section?.card_4_title || "Special Project Transport"}
             paragraph1={pageData.card_4_section?.card_4_description || "From heavy-lift to out-of-gauge, we're always up for the toughest transport challenges. Our team manages permits, escorts, route planning, and intermodal transfers, so your cargo moves smoothly, safely, and on schedule."}
             subtitle2={pageData.card_4_section?.card_4_subtitle || "Project cargo doesn't need to be an endless logistics headache..."}
             subtitle1=""
@@ -274,3 +276,33 @@ const IntegratedLogistics = async() => {
 };
 
 export default IntegratedLogistics;
+
+
+
+export async function generateMetadata(): Promise<Metadata> {
+  const pageData = await getIntergratedLogistics();
+
+  // Set SEO data and fallback values
+  const seoData = pageData?.seo;
+  const defaultTitle = "Integrated Logistics & Special Projects - Nexus Logix";
+  const defaultDescription = "Seamlessly manage your supply chain with Nexus Logix. Our integrated solutions cover warehousing, fulfilment, and specialised transport for a streamlined and efficient process.";
+  const defaultKeywords = ["integrated logistics", "special projects", "3PL", "warehousing", "e-commerce fulfilment", "inventory management", "supply chain solutions", "heavy lift transport"];
+  const defaultOgImage = pageData?.hero_section?.heroImage || "/hero-images/intergrated-logi.svg";
+  const defaultCanonicalUrl = "https://nexuslogix.com.au/integrated-logistics";
+
+  return {
+    title: seoData?.title || defaultTitle,
+    description: seoData?.description || defaultDescription,
+    keywords: seoData?.keywords || defaultKeywords,
+    openGraph: {
+      title: seoData?.openGraph?.ogTitle || seoData?.title || defaultTitle,
+      description: seoData?.openGraph?.ogDescription || seoData?.description || defaultDescription,
+      images: seoData?.openGraph?.ogImage ? [urlFor(seoData.openGraph?.ogImage).url()] : [defaultOgImage],
+      url: seoData?.canonicalUrl || defaultCanonicalUrl,
+      type: "website",
+    },
+    alternates: {
+      canonical: seoData?.canonicalUrl || defaultCanonicalUrl,
+    },
+  }
+}

@@ -7,17 +7,19 @@ import Quote from "@/Components/Quote";
 import Link from "next/link";
 import HeroSection from "@/Components/HeroSection";
 import { getTrackAndTraceData } from "@/sanity/lib/api";
-
+import CallToActionClient from "@/Components/CallToActionClient";
+import { Metadata } from "next";
+import { urlFor } from "../../../client";
 
 interface IconCard {
   card_title?: string;
-  card_description?: string;
+  card_description_1?: string;
   card_icon?: string;
 }
 
 interface HeroSection {
-    heroTitle?: string;
-    heroImage?: string;
+  heroTitle?: string;
+  heroImage?: string;
 }
 
 // interface traceAndTraceData {
@@ -58,50 +60,8 @@ interface HeroSection {
 //   }
 // }
 
-const TrackAndTrace = async() => {
-  //   const [activeTab, setActiveTab] = useState("track");
-
-
-
-  // const [pageData, setPageData] = useState<traceAndTraceData | null>(null);
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState<string | null>(null);
-
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       setLoading(true);
-  //       const data = await trackAndTrace();
-
-  //       if (data && data.length > 0) {
-  //         setPageData(data[0]);
-  //       } else {
-  //         setPageData(null);
-  //       }
-  //     } catch (err) {
-  //       console.error("Failed to fetch Track and Trace data:", err);
-  //       setError("Failed to load page content.");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
-
-
-  // if (loading) {
-  //   return;
-  // }
-
-  // if (error) {
-  //   return <div className="min-h-screen flex items-center justify-center text-red-600">{error}</div>;
-  // }
-
-  // if (!pageData) {
-  //   return <div className="min-h-screen flex items-center justify-center">No content available.</div>;
-  // }
+const TrackAndTrace = async () => {
+  
 
 
   const pageData = await getTrackAndTraceData();
@@ -120,39 +80,39 @@ const TrackAndTrace = async() => {
 
   const features = [
     {
-      icon: IconCardArray[0]?.card_icon || "/cargo_icon.svg",
-      title: IconCardArray[0]?.card_title || "Cargo Tracker",
+      icon: pageData?.IconCard_1?.card_icon || "/cargo_icon.svg",
+      title: pageData?.IconCard_1?.card_title || "Cargo Tracker",
       description:
-        IconCardArray[0]?.card_description || "A Global map, showing a complete view of your air and sea freight status end-to-end, including every consignment's current location with accurate ETAs, so you can plan better.",
+        pageData?.IconCard_1?.card_description_1 || "A Global map, showing a complete view of your air and sea freight status end-to-end, including every consignment's current location with accurate ETAs, so you can plan better.",
     },
     {
-      icon: IconCardArray[1]?.card_icon || "/performance_icon.svg",
-      title: IconCardArray[1]?.card_title || "Performance Reports",
+      icon: pageData?.IconCard_2?.card_icon || "/performance_icon.svg",
+      title: pageData?.IconCard_2?.card_title || "Performance Reports",
       description:
-        IconCardArray[1]?.card_description || "Access 12-month trends on shipping performance, container behaviour across carriers and ports, and potential delays. Visual performance data lets you identify patterns and model future outcomes, helping you optimize your operations.",
+        pageData?.IconCard_2?.card_description_1 || "Access 12-month trends on shipping performance, container behaviour across carriers and ports, and potential delays. Visual performance data lets you identify patterns and model future outcomes, helping you optimize your operations.",
     },
     {
-      icon: IconCardArray[2]?.card_icon || "/order_icon.svg",
-      title: IconCardArray[2]?.card_title || "Order Manager for customers with large volumes and multiple shipments",
-      description: IconCardArray[2]?.card_description || "Full Control from purchase order to Delivery, including providing your team and suppliers with secure, real-time access to shipment data. Manage cargo releases, shipment optimization, packing manifests, exceptions, and approvals in one central platform, streamlining the entire fulfilment process.",
+      icon: pageData?.IconCard_3?.card_icon || "/order_icon.svg",
+      title: pageData?.IconCard_3?.card_title || "Order Manager for customers with large volumes and multiple shipments",
+      description: pageData?.IconCard_3?.card_description_1 || "Full Control from purchase order to Delivery, including providing your team and suppliers with secure, real-time access to shipment data. Manage cargo releases, shipment optimization, packing manifests, exceptions, and approvals in one central platform, streamlining the entire fulfilment process.",
     },
     {
-      icon: IconCardArray[3]?.card_icon || "/time_icon.svg",
-      title: IconCardArray[3]?.card_title || "Real-Time Alerts",
+      icon: pageData?.IconCard_4?.card_icon || "/time_icon.svg",
+      title: pageData?.IconCard_4?.card_title || "Real-Time Alerts",
       description:
-        IconCardArray[3]?.card_description || "Automated notifications on delays, disruptions, and milestone updates let your team take immediate action, avoiding surprises and improving customer service.",
+        pageData?.IconCard_4?.card_description_1 || "Automated notifications on delays, disruptions, and milestone updates let your team take immediate action, avoiding surprises and improving customer service.",
     },
     {
-      icon: IconCardArray[4]?.card_icon || "/co2_icon.svg",
-      title: IconCardArray[4]?.card_title || "CO₂ Visibility",
+      icon: pageData?.IconCard_5?.card_icon || "/co2_icon.svg",
+      title: pageData?.IconCard_5?.card_title || "CO₂ Visibility",
       description:
-        IconCardArray[4]?.card_description || "Neo provides full visibility into your carbon emissions per shipment, enabling your team to track sustainability goals, reduce waste, and support greener supply chain initiatives.",
+        pageData?.IconCard_5?.card_description_1 || "Neo provides full visibility into your carbon emissions per shipment, enabling your team to track sustainability goals, reduce waste, and support greener supply chain initiatives.",
     },
     {
-      icon: IconCardArray[5]?.card_icon || "/multiplatform_icon.svg",
-      title: IconCardArray[5]?.card_title || "Multiplatform Accessibility",
+      icon: pageData?.IconCard_6?.card_icon || "/multiplatform_icon.svg",
+      title: pageData?.IconCard_6?.card_title || "Multiplatform Accessibility",
       description:
-        IconCardArray[5]?.card_description || "Neo's mobile-responsive dashboards provide instant access to real-time insights from any device.",
+        pageData?.IconCard_6?.card_description_1 || "Neo's mobile-responsive dashboards provide instant access to real-time insights from any device.",
     },
   ];
 
@@ -324,7 +284,7 @@ const TrackAndTrace = async() => {
               {/* Text with links */}
               <p className="font-poppins sm:text-[24px] md:text-[24px] lg:text-[26px] text-white leading-snug">
                 {pageData.contact_first_text || "Call Richard on"}{" "}
-                <span
+                {/* <span
                   className="underline cursor-pointer"
                   onClick={() => {
                     const message = pageData.alert_message || "Do you want to call Richard?"; 
@@ -337,19 +297,25 @@ const TrackAndTrace = async() => {
                   }}
                 >
                 {pageData.underline_text || "Number"}
-              </span>{" "}
-              {pageData.middle_text || "for a free demo or to"}{" "}
-              <Link href={pageData.contact_link || "/contactUs"} className="underline cursor-pointer">
-                {pageData.underline_text_2 || "Reach Us"}
-              </Link>
-              .
-            </p>
+              </span>{" "}  */}
+
+                <CallToActionClient
+                  contactNumber={pageData.contact_number}
+                  alertMessage={pageData.alert_message}
+                  underlineText={pageData.underline_text}
+                />{" "}
+                {pageData.middle_text || "for a free demo or to"}{" "}
+                <Link href={pageData.contact_link || "/contactUs"} className="underline cursor-pointer">
+                  {pageData.underline_text_2 || "Reach Us"}
+                </Link>
+                .
+              </p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-      {/* Bottom Section with Background Image */ }
+      {/* Bottom Section with Background Image */}
       <div
         className="relative h-64 sm:h-80 lg:h-96 lg:-mt-20 overflow-hidden"
         style={{ marginTop: "100px" }}
@@ -389,3 +355,31 @@ const TrackAndTrace = async() => {
 };
 
 export default TrackAndTrace;
+
+export async function generateMetadata(): Promise<Metadata> {
+    const pageData = await getTrackAndTraceData();
+
+    // Set SEO data and fallback values
+    const seoData = pageData?.seo;
+    const defaultTitle = "Track & Trace Your Cargo - Nexus Logix";
+    const defaultDescription = "Gain real-time visibility into your shipments with the Nexus Logix 'Neo' dashboard. Track cargo, view performance reports, and manage orders with live alerts.";
+    const defaultKeywords = ["track and trace", "cargo tracking", "shipment visibility", "freight tracking", "logistics dashboard", "real-time alerts", "Nexus Logix Neo"];
+    const defaultOgImage = pageData?.hero_section?.heroImage || "/trackAndTrace_hero_banner.svg";
+    const defaultCanonicalUrl = "https://nexuslogix.com.au/track-and-trace";
+
+    return {
+        title: seoData?.title || defaultTitle,
+        description: seoData?.description || defaultDescription,
+        keywords: seoData?.keywords || defaultKeywords,
+        openGraph: {
+            title: seoData?.openGraph?.ogTitle || seoData?.title || defaultTitle,
+            description: seoData?.openGraph?.ogDescription || seoData?.description || defaultDescription,
+            images: seoData?.openGraph?.ogImage ? [urlFor(seoData.openGraph?.ogImage).url()] : [defaultOgImage],
+            url: seoData?.canonicalUrl || defaultCanonicalUrl,
+            type: "website",
+        },
+        alternates: {
+            canonical: seoData?.canonicalUrl || defaultCanonicalUrl,
+        },
+    }
+}

@@ -48,9 +48,12 @@ export const airAndFreightService =
             title,
             description,
             keywords,
-            ogTitle,
-            ogDescription,
-            ogImage,
+            openGraph{
+              ogTitle,
+              ogDescription,
+              "ogImage": ogImage.asset->url
+            },
+            
             canonicalUrl
         }
     }`;
@@ -108,16 +111,19 @@ export const insights = `
   },
 
   
-  seo{
-    page,
-    title,
-    description,
-    keywords [],
-    ogTitle,
-    ogDescription,
-    "ogImage": ogImage.asset->url,
-    canonicalUrl
-  }
+  seo {
+            page,
+            title,
+            description,
+            keywords,
+            openGraph{
+              ogTitle,
+              ogDescription,
+              "ogImage": ogImage.asset->url
+            },
+            
+            canonicalUrl
+        }
 }
   
 `
@@ -131,6 +137,22 @@ export const Post =
       postContent,
       "slug": slug.current,
       "postImage": postImage.asset->url,
+
+
+
+      seo {
+            page,
+            title,
+            description,
+            keywords,
+            openGraph{
+              ogTitle,
+              ogDescription,
+              "ogImage": ogImage.asset->url
+            },
+            
+            canonicalUrl
+        }
       
     }`
 
@@ -165,16 +187,19 @@ export const contactUs = `
   map_link,
 
   
-  seo{
-    page,
-    title,
-    description,
-    keywords [],
-    ogTitle,
-    ogDescription,
-    "ogImage": ogImage.asset->url,
-    canonicalUrl
-  }
+  seo {
+            page,
+            title,
+            description,
+            keywords,
+            openGraph{
+              ogTitle,
+              ogDescription,
+              "ogImage": ogImage.asset->url
+            },
+            
+            canonicalUrl
+        }
 }
   
 `
@@ -244,21 +269,37 @@ export const customs = `
   },
 
   
-  seo{
-    page,
-    title,
-    description,
-    keywords [],
-    ogTitle,
-    ogDescription,
-    "ogImage": ogImage.asset->url,
-    canonicalUrl
-  }
+ seo {
+            page,
+            title,
+            description,
+            keywords,
+            openGraph{
+              ogTitle,
+              ogDescription,
+              "ogImage": ogImage.asset->url
+            },
+            
+            canonicalUrl
+        }
 }
   
 `
 
-
+export const siteSettingsQuery = `
+ *[_type == "siteData"]{
+  siteName,
+  logo{
+    "url": asset->url,
+    alt: asset->originalFilename
+  },
+  script,
+  favicon{
+    "url": asset->url,
+    alt: asset->originalFilename
+  }
+}
+`;
 
 export const footer = `
   *[_type == "footer"]{
@@ -277,7 +318,21 @@ export const footer = `
   footer_links_column_2[]->{
    nav_item_name,
     nav_item_link,
-  }
+  },
+
+  seo {
+            page,
+            title,
+            description,
+            keywords,
+            openGraph{
+              ogTitle,
+              ogDescription,
+              "ogImage": ogImage.asset->url
+            },
+            
+            canonicalUrl
+        }
 }
   `
 
@@ -435,16 +490,19 @@ export const homePage = `
   ,
 
   
-  seo{
-    page,
-    title,
-    description,
-    keywords [],
-    ogTitle,
-    ogDescription,
-    "ogImage": ogImage.asset->url,
-    canonicalUrl
-  }
+  seo {
+            page,
+            title,
+            description,
+            keywords,
+            openGraph{
+              ogTitle,
+              ogDescription,
+              "ogImage": ogImage.asset->url
+            },
+            
+            canonicalUrl
+        }
 }
   `
 
@@ -486,16 +544,19 @@ export const roadAndRail = `
   },
 
   
-  seo{
-    page,
-    title,
-    description,
-    keywords [],
-    ogTitle,
-    ogDescription,
-    "ogImage": ogImage.asset->url,
-    canonicalUrl
-  }
+  seo {
+            page,
+            title,
+            description,
+            keywords,
+            openGraph{
+              ogTitle,
+              ogDescription,
+              "ogImage": ogImage.asset->url
+            },
+            
+            canonicalUrl
+        }
 }
   
 `
@@ -575,16 +636,19 @@ export const services = `
   },
 
   
-  seo{
-    page,
-    title,
-    description,
-    keywords [],
-    ogTitle,
-    ogDescription,
-    "ogImage": ogImage.asset->url,
-    canonicalUrl
-  }
+  seo {
+            page,
+            title,
+            description,
+            keywords,
+            openGraph{
+              ogTitle,
+              ogDescription,
+              "ogImage": ogImage.asset->url
+            },
+            
+            canonicalUrl
+        }
 }
   
 `
@@ -595,9 +659,21 @@ export const privacyPolicy = `
     heroTitle,
     "heroImage": heroImage.asset->url,
     },
-  privacy_policy[]
+  privacy_policy[],
 
-
+  seo {
+    page,
+    title,
+    description,
+    keywords,
+    openGraph{
+      ogTitle,
+      ogDescription,
+      "ogImage": ogImage.asset->url
+    },
+    
+    canonicalUrl
+  }
 }
   
 `
@@ -611,16 +687,19 @@ export const termsAndConditions = `
   terms_and_conditions[],
 
   
-  seo{
-    page,
-    title,
-    description,
-    keywords [],
-    ogTitle,
-    ogDescription,
-    "ogImage": ogImage.asset->url,
-    canonicalUrl
-  }
+  seo {
+            page,
+            title,
+            description,
+            keywords,
+            openGraph{
+              ogTitle,
+              ogDescription,
+              "ogImage": ogImage.asset->url
+            },
+            
+            canonicalUrl
+        }
 }
   
 `
@@ -650,32 +729,32 @@ export const trackAndTrace = `
   IconCard_1{
     
     card_title,
-    card_description,
+    card_description_1,
     "card_icon": card_icon.asset->url
   },
   IconCard_2{
     card_title,
-    card_description,
+    card_description_1,
     "card_icon": card_icon.asset->url
   },
   IconCard_3{
     card_title,
-    card_description,
+    card_description_1,
     "card_icon": card_icon.asset->url
   },
   IconCard_4{
     card_title,
-    card_description,
+    card_description_1,
     "card_icon": card_icon.asset->url
   },
   IconCard_5{
     card_title,
-    card_description,
+    card_description_1,
     "card_icon": card_icon.asset->url
   },
   IconCard_6{
     card_title,
-    card_description,
+    card_description_1,
     "card_icon": card_icon.asset->url
   },
  contact_first_text,
@@ -691,21 +770,26 @@ export const trackAndTrace = `
     button_link,
     "image": image.asset->url,
     imageAlt
-  }
-},
+  },
+
+  seo {
+            page,
+            title,
+            description,
+            keywords,
+            openGraph{
+              ogTitle,
+              ogDescription,
+              "ogImage": ogImage.asset->url
+            },
+            
+            canonicalUrl
+        }
+}
 
 
-  seo{
-    page,
-    title,
-    description,
-    keywords [],
-    ogTitle,
-    ogDescription,
-    "ogImage": ogImage.asset->url,
-    canonicalUrl
-  }
-  
+
+
 `
 
 
@@ -798,16 +882,19 @@ export const whyNexus = `
   },
 
   
-  seo{
-    page,
-    title,
-    description,
-    keywords [],
-    ogTitle,
-    ogDescription,
-    "ogImage": ogImage.asset->url,
-    canonicalUrl
-  }
+  seo {
+            page,
+            title,
+            description,
+            keywords,
+            openGraph{
+              ogTitle,
+              ogDescription,
+              "ogImage": ogImage.asset->url
+            },
+            
+            canonicalUrl
+        }
 }
   
 `
@@ -860,16 +947,19 @@ export const integratedLogistics = `
 
 
   
-  seo{
-    page,
-    title,
-    description,
-    keywords [],
-    ogTitle,
-    ogDescription,
-    "ogImage": ogImage.asset->url,
-    canonicalUrl
-  }
+  seo {
+            page,
+            title,
+            description,
+            keywords,
+            openGraph{
+              ogTitle,
+              ogDescription,
+              "ogImage": ogImage.asset->url
+            },
+            
+            canonicalUrl
+        }
 }
   
 `
@@ -975,15 +1065,18 @@ export const leadership = `
 
 
   
-  seo{
-    page,
-    title,
-    description,
-    keywords [],
-    ogTitle,
-    ogDescription,
-    "ogImage": ogImage.asset->url,
-    canonicalUrl
+seo {
+      page,
+      title,
+      description,
+      keywords,
+      openGraph{
+        ogTitle,
+        ogDescription,
+        "ogImage": ogImage.asset->url
+      },
+      
+      canonicalUrl
   }
 }
   
