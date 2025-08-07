@@ -4,11 +4,12 @@ import React from "react";
 import Testimonial from "@/Components/Testimonial";
 import LinkedinSection from "@/Components/LinkedinSection";
 import AnimatedSection from "@/Components/AnimatedSection";
-
+import { urlFor } from "../../client";
 import HomeHeader from "@/Components/HomeHeader";
 import ComprehensiveSolutions from "@/Components/ComprehensiveSolutions";
 import StatBanner from "@/Components/StatBanner";
 import {getHomePageData} from "@/sanity/lib/api";
+import { Metadata } from "next";
 
 
 export default async function Home() {
@@ -22,7 +23,7 @@ export default async function Home() {
     // const heroTitleSecondPart = heroTitleParts.slice(3).join(" ") || "Never Sleep. Neither Do We.";
 
     const heroTitle = homeData.heroTitle ?? "Supply Chains Never Sleep. Neither Do We.";
-    const heroTitleParts = heroTitle.split(" ", 6); // Split into words
+    const heroTitleParts = heroTitle.split(" ", 7); // Split into words
     const heroTitleFirstPart = heroTitleParts.slice(0, 2).join(" ") || "Supply Chains"; // "Supply Chains"
     const heroTitleSecondPart = heroTitleParts.slice(2, 4).join(" ") + "." || "Never Sleep."; // "Never Sleep."
     const heroTitleThirdPart = heroTitleParts.slice(4).join(" ") || "Neither Do We."; // "Neither Do We."
@@ -32,7 +33,7 @@ export default async function Home() {
     const heroDesc = homeData.heroDescription ?? "As your agile logistics partner, we operate as an extension of your business, so you enjoy peace of mind, and responsive service.";
     const heroButtonLink = homeData.hero_button_link ?? "/services";
     const heroButtonText = homeData.hero_button_text ?? "Explore More";
-
+    console.log("herotitle: ", heroTitle);
     const values = [
         {
             icon: homeData.icon_card_1.card_icon || "/dependability.png",
@@ -371,4 +372,36 @@ export default async function Home() {
             </AnimatedSection>
         </div>
     );
+}
+
+
+
+
+
+export async function generateMetadata(): Promise<Metadata> {
+    const pageData = await getHomePageData();
+
+    // Set SEO data and fallback values
+    const seoData = pageData?.seo;
+    const defaultTitle = "Nexus Logix"; // No change, as it's a specific title.
+    const defaultDescription = pageData?.content?.service_card_1?.card_description;
+    const defaultKeywords = ["air freight", "sea freight", "ocean cargo", "freight forwarding", "logistics", "shipping", "international shipping", "cargo services"];
+    const defaultOgImage = pageData?.content?.service_card_1?.card_image;
+    const defaultCanonicalUrl = "https://nexuslogix.com.au/air-and-sea-freight";
+
+    return {
+        title: seoData?.title || defaultTitle,
+        description: seoData?.description || defaultDescription,
+        keywords: seoData?.keywords || defaultKeywords,
+        openGraph: {
+            title: seoData?.openGraph?.ogTitle || seoData?.title || defaultTitle,
+            description: seoData?.openGraph?.ogDescription || seoData?.description || defaultDescription,
+            images: seoData?.openGraph?.ogImage ? [urlFor(seoData.openGraph?.ogImage).url()] : [defaultOgImage],
+            url: seoData?.canonicalUrl || defaultCanonicalUrl,
+            type: "website",
+        },
+        alternates: {
+            canonical: seoData?.canonicalUrl || defaultCanonicalUrl,
+        },
+    }
 }
