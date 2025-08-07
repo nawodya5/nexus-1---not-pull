@@ -498,64 +498,9 @@ import { getFooterData } from "@/sanity/lib/api";
 
 const Footer = async () => {
 
-    // const [sectionData, setSectionData] = useState<FooterData | null>(null);
-    // const [loading, setLoading] = useState(true);
-    // const [error, setError] = useState<string | null>(null);
 
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             setLoading(true);
-    //             const data = await footer();
-
-
-    //             if (data && data.length > 0) {
-    //                 setSectionData(data[0]);
-    //             } else {
-    //                 setSectionData(null); // No data found
-    //             }
-    //         } catch (err) {
-    //             console.error("Failed to fetch LinkedIn section data:", err);
-    //             setError("Failed to load LinkedIn section content.");
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
-
-    //     fetchData();
-    // }, []); // Empty dependency array means this runs once on mount
-
-    // // --- Loading, Error, and No Data States ---
-    // if (loading) {
-    //     return (
-    //         <section className="py-4 sm:py-8 lg:py-12">
-    //             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    //                 <div className="bg-[#E7E6DD] rounded-[10px] p-4 sm:p-6 lg:py-8 lg:px-12 flex flex-col items-center justify-center h-40">
-    //                     Loading LinkedIn section...
-    //                 </div>
-    //             </div>
-    //         </section>
-    //     );
-    // }
-
-    // if (error) {
-    //     return (
-    //         <section className="py-4 sm:py-8 lg:py-12">
-    //             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    //                 <div className="bg-red-100 text-red-700 rounded-[10px] p-4 sm:p-6 lg:py-8 lg:px-12 flex flex-col items-center justify-center h-40">
-    //                     {error}
-    //                 </div>
-    //             </div>
-    //         </section>
-    //     );
-    // }
-
-    // // If no data is found after loading, you might choose to render nothing or a default message
-    // if (!sectionData) {
-    //     return null; // Or render a default LinkedIn section if you have one
-    // }
     const footerData = await getFooterData();
+    console.log("Footer Data front:", footerData);
 
     if (!footerData) {
         return null; // Or render a default footer if you have one
@@ -623,7 +568,7 @@ const Footer = async () => {
                                 {footerData.footer_column_1_title || "Links"}
                             </h4>
                             <div className="space-y-2 text-center sm:text-left">
-                                <Link
+                                {/* <Link
                                     href="/"
                                     className="block text-white hover:text-[#bbbbbb] transition-colors text-xs sm:text-sm"
                                 >
@@ -658,7 +603,17 @@ const Footer = async () => {
                                     className="block text-white hover:text-[#bbbbbb] transition-colors text-xs sm:text-sm"
                                 >
                                     Track and Trace
-                                </Link>
+                                </Link> */}
+
+                                {footerData.footer_links_column_1?.map((item, index) => (
+                                    <Link
+                                        key={index} // Using index as key is okay if items don't change order or get added/removed frequently
+                                        href={item.nav_item_link || '#'} // Fallback to '#' if link is missing
+                                        className="block text-white hover:text-[#bbbbbb] transition-colors text-xs sm:text-sm"
+                                    >
+                                        {item.nav_item_name || 'Link Name'} {/* Fallback text */}
+                                    </Link>
+                                ))}
                             </div>
                         </div>
 
@@ -689,10 +644,10 @@ const Footer = async () => {
                         {/* Services */}
                         <div>
                             <h4 className="text-base sm:text-xl lg:text-2xl font-bold mb-4 sm:mb-6 text-center sm:text-left">
-                               { footerData.footer_column_2_title || " Services"}
+                                {footerData.footer_column_2_title || " Services"}
                             </h4>
                             <div className="space-y-2 text-center sm:text-left">
-                                <Link
+                                {/* <Link
                                     href="/air-and-sea-freight"
                                     className="block text-white hover:text-[#bbbbbb] transition-colors text-xs sm:text-sm"
                                 >
@@ -715,7 +670,15 @@ const Footer = async () => {
                                     className="block text-white hover:text-[#bbbbbb] transition-colors text-xs sm:text-sm"
                                 >
                                     Integrated Logistics & Special Projects
-                                </Link>
+                                </Link> */}{footerData.footer_links_column_2?.map((item, index) => (
+                                    <Link
+                                        key={index} // Using index as key is okay if items don't change order or get added/removed frequently
+                                        href={item.nav_item_link || '#'} // Fallback to '#' if link is missing
+                                        className="block text-white hover:text-[#bbbbbb] transition-colors text-xs sm:text-sm"
+                                    >
+                                        {item.nav_item_name || 'Link Name'} {/* Fallback text */}
+                                    </Link>
+                                ))}
                             </div>
                         </div>
                     </div>

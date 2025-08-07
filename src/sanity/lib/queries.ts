@@ -301,8 +301,43 @@ export const siteSettingsQuery = `
 }
 `;
 
+// export const footer = `
+//   *[_type == "footer"]{
+//   footer_description,
+//   footer_button_text,
+//   footer_button_link,
+//   "footer_logo": footer_logo.asset->url,
+//   footer_logo_alt,
+//   footer_sub_description,
+//   footer_column_1_title,
+//   footer_links_column_1[]->{
+//     nav_item_name,
+//     nav_item_link,
+//   },
+//   footer_column_2_title,
+//   footer_links_column_2[]->{
+//    nav_item_name,
+//     nav_item_link,
+//   },
+
+//   seo {
+//             page,
+//             title,
+//             description,
+//             keywords,
+//             openGraph{
+//               ogTitle,
+//               ogDescription,
+//               "ogImage": ogImage.asset->url
+//             },
+            
+//             canonicalUrl
+//         }
+// }
+//   `
+
 export const footer = `
-  *[_type == "footer"]{
+  *[_type == "footer"] {
   footer_description,
   footer_button_text,
   footer_button_link,
@@ -310,33 +345,17 @@ export const footer = `
   footer_logo_alt,
   footer_sub_description,
   footer_column_1_title,
-  footer_links_column_1[]->{
-    nav_item_name,
-    nav_item_link,
+  footer_links_column_1[] {
+    ...,
+    
   },
   footer_column_2_title,
-  footer_links_column_2[]->{
-   nav_item_name,
-    nav_item_link,
-  },
-
-  seo {
-            page,
-            title,
-            description,
-            keywords,
-            openGraph{
-              ogTitle,
-              ogDescription,
-              "ogImage": ogImage.asset->url
-            },
-            
-            canonicalUrl
-        }
+  footer_links_column_2[] {
+    ...,
+    
+  }
 }
   `
-
-
 
 export const freight_quote = `
   
